@@ -22,12 +22,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    universityPreferences: [{
-      type: 
-    }],
-    searchesQuesries: [{
-      
-    }]
+    // universityPreferences: [{
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'Universities'
+    // }],
+    searchesQuesries: [
+      {
+        type: String
+      }
+    ],
+    userType: {
+      type: String,
+      required: true
+    }
   },
   { collection: "Users" }
 );
