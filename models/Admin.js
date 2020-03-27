@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const adminSchema = new mongoose.Schema(
   {
+    firstName: {
+      type: String
+    },
+    lastName: {
+      type: String
+    },
     email: {
       type: String,
       unique: true,
@@ -15,12 +21,19 @@ const adminSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true
-    }
+    },
+    oldPasswords: [{
+      type: String
+    }]
   },
   { collection: "Admins" }
 );
 
 //This sets timestamps of createdAt and updatedAt along with each document created
 adminSchema.set("timestamps", true);
+
+adminSchema.statics.getFullName = function () {
+  return this.firstName + this.lastName;
+}
 
 module.exports = mongoose.model("Admins", adminSchema);
