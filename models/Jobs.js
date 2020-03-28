@@ -4,17 +4,39 @@ const jobSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      unique: true,
-      required: true,
       match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
-    password: {
-      type: String,
-      required: true
+    firstName: {
+      type: String
     },
-    username: {
-      type: String,
-      required: true
+    lastName: {
+      type: String
+    },
+    company: {
+      type: String
+    },
+    address: {
+      streetAddress: {
+        type: String
+      },
+      city: {
+        type: String
+      },
+      country: {
+        type: String
+      },
+      postalCode: {
+        type: String
+      }
+    },
+    description: {
+      type: String
+    },
+    logo: {
+      type: Buffer
+    },
+    link: {
+      type: String
     }
   },
   { collection: "Jobs" }

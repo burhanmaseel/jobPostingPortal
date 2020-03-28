@@ -34,6 +34,9 @@ const userSchema = new mongoose.Schema(
     userType: {
       type: String,
       required: true
+    },
+    phone: {
+      type: String
     }
   },
   { collection: "Users" }

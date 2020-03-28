@@ -32,8 +32,8 @@ const adminSchema = new mongoose.Schema(
 //This sets timestamps of createdAt and updatedAt along with each document created
 adminSchema.set("timestamps", true);
 
-adminSchema.statics.getFullName = function () {
+adminSchema.virtual('fullName').get(function () {
   return this.firstName + this.lastName;
-}
+});
 
 module.exports = mongoose.model("Admins", adminSchema);
