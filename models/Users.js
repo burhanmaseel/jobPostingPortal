@@ -3,10 +3,12 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
   {
     firstName: {
-      type: String
+      type: String,
+      default: null
     },
     lastName: {
-      type: String
+      type: String,
+      default: null
     },
     email: {
       type: String,
@@ -33,10 +35,12 @@ const userSchema = new mongoose.Schema(
     ],
     userType: {
       type: String,
-      required: true
+      required: true,
+      default: null
     },
     phone: {
-      type: String
+      type: String,
+      default: null
     }
   },
   { collection: "Users" }
