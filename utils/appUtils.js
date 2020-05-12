@@ -1,4 +1,4 @@
-let createError = errorCode => {
+export default createError = errorCode => {
   switch (errorCode) {
     case 200:
       return {
@@ -24,8 +24,4 @@ let createError = errorCode => {
         message: "Failed"
       };
   }
-};
-
-module.exports = {
-  createError
 };

@@ -23,7 +23,7 @@ db.once("open", () => {
   console.log(`Database Connected Successfully`);
 });
 
-const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/app/authRoutes");
 
 authRoutes(app);
 
