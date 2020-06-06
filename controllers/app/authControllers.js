@@ -4,28 +4,25 @@
 const Users = require("../../models/Users");
 const AuthHelpers = require("../../helpers/authHelpers");
 let authHelpers = new AuthHelpers();
-//import { createError } from "../utils/appUtils";
-//import authHelpers from "../helpers/authHelpers";
 
-//A basic controller to signup a new user
-const signup = (req, res) => {
+const signup = async (req, res) => {
   let { email, username, password, userType } = req.body;
   let isValid = authHelpers.checkPasswordValidity(password);
+  let user = new Users({
+    email: email,
+    username: username,
+    userType: userType
+  });
+  user.password = await user.createHashPassword(password);
   if (isValid) {
-    Users.create({
-      email: email,
-      username: username,
-      password: password,
-      userType: userType
-    })
-      .then(user => {
+    user.save()
+      .then(createdUser => {
         return res.status(200).json({
           success: true,
-          message: "User Created Successfully with email : " + user.email
+          message: "User Created Successfully with email : " + createdUser.email
         });
       })
       .catch(error => {
-        console.log(error);
         return res.status(500).json({
           success: false,
           message: error.code == 11000 ? "User Already Exist" : "Internal Server Error"
@@ -37,29 +34,32 @@ const signup = (req, res) => {
       message: "Password Invalid"
     });
   }
-  //appUtils.createError();
 };
 
 const login = (req, res) => {
   let { username, password } = req.body;
   Users.findOne({
-    $and: [
-      { $or: [{ username: username }, { email: username }] },
-      { password: password }
-    ]
+    $or: [{ username: username }, { email: username }]
   })
-    .then(user => {
-      console.log(user);
-      return res.status(200).json({
-        success: true,
-        message: "User Logged in successfully: " + user.email
-      });
+    .then(async user => {
+      let passwordMatched = await user.comparePassword(password);
+      if (passwordMatched) {
+        return res.status(200).json({
+          success: true,
+          message: "User Logged in successfully: " + user.email
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: "Incorrect Username or Password"
+        });
+      }
     })
     .catch(error => {
       console.log(error);
       return res.status(500).json({
         success: false,
-        message: "Incorrect Password"
+        message: "Incorrect Credentials"
       });
     });
 };

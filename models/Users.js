@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -22,7 +23,8 @@ const userSchema = new mongoose.Schema(
     },
     username: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     // universityPreferences: [{
     //   type: Schema.Types.ObjectId,
@@ -48,5 +50,30 @@ const userSchema = new mongoose.Schema(
 
 //This sets timestamps of createdAt and updatedAt along with each document created
 userSchema.set("timestamps", true);
+
+//Do not use Arror functions in mongoose as they change the semantic of THIS keyword
+userSchema.methods.createHashPassword = function (password) {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) {
+        return err;
+      }
+      bcrypt.hash(password, salt, (err, hash) => {
+        resolve(hash);
+      });
+    });
+  });
+}
+
+userSchema.methods.comparePassword = function (password) {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, this.password, (err, isMatch) => {
+      if (err) {
+        return err;
+      }
+      resolve(isMatch);
+    });
+  });
+}
 
 module.exports = mongoose.model("Users", userSchema);

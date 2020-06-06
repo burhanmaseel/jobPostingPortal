@@ -1,3 +1,5 @@
+const passport = require('passport');
+
 module.exports = app => {
     const authControllers = require("../../controllers/app/authControllers");
 
@@ -5,5 +7,6 @@ module.exports = app => {
     app.route("/api/app/signup").post(authControllers.signup);
     app.route("/api/app/login").post(authControllers.login);
     app.route("/api/app/testClasses").get(authControllers.testClasses);
+    app.post("/api/app/login", passport.authenticate('local'), authControllers.login)
 
 }
